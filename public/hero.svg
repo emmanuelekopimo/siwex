@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 400" width="480" height="400" role="img" aria-label="Student finding a tech hub on a map">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".35"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity=".08"/>
+    </linearGradient>
+  </defs>
+  <circle cx="250" cy="200" r="170" fill="url(#sky)"/>
+  <!-- map card -->
+  <g transform="rotate(-6 250 190)">
+    <rect x="110" y="70" width="280" height="220" rx="22" fill="#ffffff"/>
+    <path d="M110 160 C170 130 210 210 270 170 S360 140 390 175" stroke="#e8defc" stroke-width="16" fill="none"/>
+    <path d="M190 70 C200 140 160 200 210 290" stroke="#d6f6f7" stroke-width="12" fill="none"/>
+    <rect x="135" y="95" width="40" height="30" rx="6" fill="#f2ecfe"/>
+    <rect x="300" y="215" width="60" height="44" rx="8" fill="#f2ecfe"/>
+    <rect x="230" y="100" width="54" height="36" rx="8" fill="#e6fafb"/>
+  </g>
+  <!-- pins -->
+  <g>
+    <path d="M300 92c-14 0-25 11-25 24 0 18 25 42 25 42s25-24 25-42c0-13-11-24-25-24z" fill="#7d2ae8"/>
+    <circle cx="300" cy="116" r="9" fill="#fff"/>
+  </g>
+  <g>
+    <path d="M178 150c-10 0-18 8-18 17 0 13 18 30 18 30s18-17 18-30c0-9-8-17-18-17z" fill="#00c4cc"/>
+    <circle cx="178" cy="167" r="6" fill="#fff"/>
+  </g>
+  <g>
+    <path d="M352 196c-9 0-16 7-16 15 0 11 16 26 16 26s16-15 16-26c0-8-7-15-16-15z" fill="#ff6b35"/>
+    <circle cx="352" cy="211" r="5" fill="#fff"/>
+  </g>
+  <!-- student -->
+  <g transform="translate(70 200)">
+    <ellipse cx="80" cy="190" rx="80" ry="10" fill="#1b1340" opacity=".12"/>
+    <path d="M40 120 h80 l12 70 h-104z" fill="#1b1340"/>
+    <path d="M30 70 q50 -30 100 0 l-6 60 h-88z" fill="#ffb020"/>
+    <circle cx="80" cy="40" r="28" fill="#8a5a44"/>
+    <path d="M52 34 q4 -28 30 -26 q26 2 26 26 q-12 -10 -28 -8 q-16 2 -28 8z" fill="#1b1340"/>
+    <circle cx="70" cy="42" r="3" fill="#1b1340"/>
+    <circle cx="90" cy="42" r="3" fill="#1b1340"/>
+    <path d="M72 54 q8 6 16 0" stroke="#1b1340" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <rect x="44" y="98" width="72" height="46" rx="6" fill="#e9e5f5"/>
+    <rect x="50" y="104" width="60" height="34" rx="3" fill="#7d2ae8"/>
+    <path d="M62 121 l8 8 l18 -16" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="36" y="144" width="88" height="7" rx="3" fill="#cfc8e6"/>
+  </g>
+  <!-- sparkles -->
+  <circle cx="420" cy="80" r="6" fill="#fff"/>
+  <circle cx="80" cy="110" r="4" fill="#fff"/>
+  <path d="M420 300 l5 12 l12 5 l-12 5 l-5 12 l-5 -12 l-12 -5 l12 -5z" fill="#fff"/>
+</svg>
