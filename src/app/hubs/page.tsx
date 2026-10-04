@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { getDb } from "@/db";
 import { HubCard } from "@/components/hub-card";
 import { Empty } from "@/components/ui";
@@ -20,7 +21,7 @@ export default async function HubsPage(props: PageProps<"/hubs">) {
       <div className="page-head">
         <div className="container">
           <h1>Tech hubs</h1>
-          <p>Hubs taking SIWES students. Search by name, city or track.</p>
+          <p>Tech hubs taking SIWES students across Nigeria. Search by name, city or track.</p>
         </div>
       </div>
       <div className="container stack">
@@ -36,6 +37,12 @@ export default async function HubsPage(props: PageProps<"/hubs">) {
           </select>
           <button className="btn" type="submit">Filter</button>
         </form>
+        <div className="chip-row" aria-label="Cities">
+          <Link href="/hubs" className={`chip-link ${filters.city ? "" : "active"}`}>All cities</Link>
+          {CITIES.map((c) => (
+            <Link key={c} href={`/hubs?city=${encodeURIComponent(c)}`} className={`chip-link ${filters.city === c ? "active" : ""}`}>{c}</Link>
+          ))}
+        </div>
         <p className="muted small" data-testid="result-count">{hubs.length} {hubs.length === 1 ? "hub" : "hubs"} found</p>
         {hubs.length ? (
           <div className="grid">{hubs.map((h) => <HubCard key={h.id} hub={h} />)}</div>

@@ -4,6 +4,7 @@
 import bcrypt from "bcryptjs";
 import { and, asc, desc, eq, ilike, inArray, or, sql } from "drizzle-orm";
 import type { DB } from "@/db";
+import { CITY_STATE } from "./catalog";
 import { applications, hubs, openings, students, users, type Hub, type Opening } from "@/db/schema";
 import {
   applicationDisplay,
@@ -171,7 +172,7 @@ export async function registerHub(
       slug,
       name: input.hubName,
       city: input.city,
-      state: input.city === "Uyo" || input.city === "Eket" || input.city === "Ikot Ekpene" ? "Akwa Ibom" : input.city,
+      state: CITY_STATE[input.city] ?? input.city,
       address: input.address,
       about: input.about,
       tracks: input.tracks,
@@ -362,4 +363,47 @@ export async function createOpening(
   if (input.deadline < today) return { ok: false, reason: "Deadline cannot be in the past." };
   const [row] = await db.insert(openings).values({ ...input, hubId: hub.id }).returning({ id: openings.id });
   return { ok: true, value: row.id };
+}
+
+/* ---------- browse openings, counts for the home page ---------- */
+
+export async function listOpenings(
+  db: DB,
+  filters: { q?: string; city?: string; track?: string; status?: "live" | "all" },
+  today: string,
+) {
+  const conds = [];
+  if (filters.q) {
+    const like = `%${filters.q}%`;
+    conds.push(or(ilike(openings.title, like), ilike(openings.description, like), ilike(hubs.name, like)));
+  }
+  if (filters.city) conds.push(eq(hubs.city, filters.city));
+  if (filters.track) conds.push(eq(openings.track, filters.track));
+  const rows = await db
+    .select({ opening: openings, hub: hubs })
+    .from(openings)
+    .innerJoin(hubs, eq(hubs.id, openings.hubId))
+    .where(conds.length ? and(...conds) : undefined);
+  const counts = await acceptedCounts(db, rows.map((r) => r.opening.id));
+  const views = rows.map((r) => ({ hub: r.hub, ...toOpeningView(r.opening, counts.get(r.opening.id) ?? 0, today) }));
+  const filtered = filters.status === "all" ? views : views.filter((o) => o.status === "open" || o.status === "closing_soon");
+  return sortOpenings(filtered);
+}
+
+export async function browseSummary(db: DB, today: string) {
+  const live = await listOpenings(db, {}, today);
+  const byTrack = new Map<string, number>();
+  const byCity = new Map<string, { hubs: Set<number>; roles: number }>();
+  for (const o of live) byTrack.set(o.track, (byTrack.get(o.track) ?? 0) + 1);
+  const allHubs = await db.select({ id: hubs.id, city: hubs.city }).from(hubs);
+  for (const h of allHubs) {
+    const c = byCity.get(h.city) ?? { hubs: new Set<number>(), roles: 0 };
+    c.hubs.add(h.id);
+    byCity.set(h.city, c);
+  }
+  for (const o of live) byCity.get(o.hub.city)!.roles++;
+  const cities = [...byCity.entries()]
+    .map(([city, v]) => ({ city, hubs: v.hubs.size, roles: v.roles }))
+    .sort((a, b) => b.hubs - a.hubs || b.roles - a.roles || a.city.localeCompare(b.city));
+  return { live, byTrack, cities };
 }

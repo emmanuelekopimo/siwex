@@ -33,9 +33,24 @@ export const COURSE_TRACKS: Record<string, TrackId[]> = {
 
 export const COURSES = Object.keys(COURSE_TRACKS);
 
-export const CITIES = ["Uyo", "Eket", "Ikot Ekpene", "Calabar", "Port Harcourt", "Lagos", "Abuja", "Enugu"];
+export const CITIES = ["Uyo", "Eket", "Ikot Ekpene", "Calabar", "Port Harcourt", "Lagos", "Abuja", "Enugu", "Ibadan", "Kaduna", "Ilorin"];
 
 export const LEVELS = [200, 300, 400, 500];
 
 /** SIWES lengths in weeks: 12 weeks (3 months) or 24 weeks (6 months). */
 export const SIWES_WEEKS = [12, 24];
+
+/** State for each city, used when a hub registers. */
+export const CITY_STATE: Record<string, string> = {
+  Uyo: "Akwa Ibom",
+  Eket: "Akwa Ibom",
+  "Ikot Ekpene": "Akwa Ibom",
+  Calabar: "Cross River",
+  "Port Harcourt": "Rivers",
+  Lagos: "Lagos",
+  Abuja: "FCT",
+  Enugu: "Enugu",
+  Ibadan: "Oyo",
+  Kaduna: "Kaduna",
+  Ilorin: "Kwara",
+};

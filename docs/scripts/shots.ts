@@ -25,6 +25,8 @@ type Step = {
   intro: string;
   mobile?: boolean;
   fullPage?: boolean;
+  /** Crop a tall page: start at the selector (or the top) and keep this many CSS pixels. */
+  clip?: { from?: string; height: number };
   run: (page: Page) => Promise<void>;
   callouts: Callout[];
 };
@@ -49,14 +51,14 @@ async function drawCallouts(page: Page, callouts: Callout[]) {
       box.dataset.callout = "1";
       Object.assign(box.style, {
         position: "absolute", left: `${x - 4}px`, top: `${y - 4}px`, width: `${r.width + 8}px`, height: `${r.height + 8}px`,
-        border: "3px solid #ff3d7f", borderRadius: "12px", zIndex: "9998", pointerEvents: "none",
+        border: "3px solid #276ef1", borderRadius: "12px", zIndex: "9998", pointerEvents: "none",
       });
       const badge = document.createElement("div");
       badge.dataset.callout = "1";
       badge.textContent = String(i + 1);
       Object.assign(badge.style, {
         position: "absolute", left: `${Math.max(2, x - 16)}px`, top: `${Math.max(2, y - 16)}px`, width: "28px", height: "28px",
-        borderRadius: "50%", background: "#ff3d7f", color: "#fff", font: "800 15px 'Plus Jakarta Sans', sans-serif",
+        borderRadius: "50%", background: "#276ef1", color: "#fff", font: "700 15px 'Inter', sans-serif",
         display: "grid", placeItems: "center", zIndex: "9999", boxShadow: "0 2px 6px rgba(0,0,0,.3)", pointerEvents: "none",
       });
       document.body.append(box, badge);
@@ -73,26 +75,50 @@ export async function takeShots(base: string, outDir: string): Promise<Shot[]> {
       id: "home", title: "Home page", intro: "The landing page a student sees first. It explains the product in one line and lets them search straight away.",
       run: async (p) => { await p.goto(`${base}/`); },
       callouts: [
-        { selector: ".searchbar", text: "Search box. Sends the student to the hub directory with the keyword filled in." },
-        { selector: ".stat-pills", text: "Live counts from the database: hubs listed, open slots left and students already placed." },
-        { selector: "[data-testid=hub-card]", text: "Hub cards sorted by open slots. Each shows tracks offered and slots left." },
+        { selector: ".search-card", text: "Search card: keyword, city and track. Sends the student to the openings list with the filters applied." },
+        { selector: ".stat-strip", text: "Live counts from the database: hubs, cities, live openings, open slots and students placed." },
+        { selector: "[data-testid=track-tile]", text: "Browse by track. Each tile shows how many live openings that track has." },
         { selector: ".site-header .btn", text: "Sign in. The demo account is filled in on the next page." },
       ],
+      clip: { height: 1700 },
+    },
+    {
+      id: "home-more", title: "Home page, further down", intro: "Below the tracks the home page lists the hubs with the most open slots, roles closing this week and hubs by city.",
+      run: async (p) => { await p.goto(`${base}/`); },
+      callouts: [
+        { selector: "[data-testid=hub-card]", text: "Hub cards sorted by open slots, with a cover picture, the generated hub logo, tracks offered and slots left." },
+        { selector: "[data-testid=opening-row]", text: "Closing this week: live roles whose deadline is 7 days away or less." },
+        { selector: "[data-testid=city-card]", text: "Hubs by city, each with its own skyline, hub count and live roles." },
+      ],
+      clip: { from: ".grid", height: 2100 },
     },
     {
       id: "hubs", title: "Hub directory", intro: "All hubs with filters for keyword, city and track. The filters are plain query parameters, so a filtered list can be shared as a link.",
       run: async (p) => { await p.goto(`${base}/hubs`); },
       callouts: [
         { selector: ".filters", text: "Keyword, city and track filters. Selects stay uncontrolled so a form submit never wipes them." },
+        { selector: ".chip-row", text: "One-tap city chips. The active city is shown in black." },
         { selector: "[data-testid=result-count]", text: "Number of hubs matching the filters." },
         { selector: "[data-testid=hub-card] .badge", text: "Slots left across all live openings at the hub. Grey when nothing is open." },
         { selector: "[data-testid=hub-card] svg[aria-label='Address verified']", text: "Green tick: the street address was checked against a public source." },
       ],
+      clip: { height: 1500 },
+    },
+    {
+      id: "openings", title: "Openings", intro: "Every live role across all hubs in one list, with the closest deadlines first.",
+      run: async (p) => { await p.goto(`${base}/openings`); },
+      callouts: [
+        { selector: ".chip-row", text: "Track chips filter the list in one tap." },
+        { selector: "[data-testid=opening-count]", text: "Number of matching openings. The link beside it also shows closed and full roles." },
+        { selector: "[data-testid=opening-row]", text: "Each row shows the hub, city, slots left, length, stipend and deadline countdown." },
+      ],
+      clip: { height: 1400 },
     },
     {
       id: "hub-detail", title: "Hub page", intro: "Every opening at a hub with its status, slots, length, stipend and deadline. Live openings are listed first.",
       run: async (p) => { await p.goto(`${base}/hubs/start-innovation-hub`); },
       callouts: [
+        { selector: ".hub-banner-bar", text: "Hub header with its cover picture, generated logo, city and a Verified badge when the address was checked." },
         { selector: "[data-testid=opening-status]", text: "Status badge worked out from the deadline and accepted count: Open, Closing soon (7 days or less), Full or Closed." },
         { selector: ".opening .meta", text: "Slots left, placement length, start date and monthly stipend in naira." },
         { selector: ".opening .small.bold", text: "Deadline with a countdown relative to today." },
@@ -189,7 +215,15 @@ export async function takeShots(base: string, outDir: string): Promise<Shot[]> {
     await page.addStyleTag({ content: "nextjs-portal{display:none!important}" });
     if (step.callouts.length) await drawCallouts(page, step.callouts);
     const file = path.join(outDir, `${step.id}.png`);
-    await page.screenshot({ path: file, fullPage: !step.mobile });
+    if (step.clip) {
+      const top = step.clip.from
+        ? await page.evaluate((sel) => Math.max(0, document.querySelector(sel)!.getBoundingClientRect().top + window.scrollY - 70), step.clip.from)
+        : 0;
+      const full = await page.evaluate(() => document.documentElement.scrollHeight);
+      await page.screenshot({ path: file, fullPage: true, clip: { x: 0, y: top, width: 1280, height: Math.min(step.clip.height, full - top) } });
+    } else {
+      await page.screenshot({ path: file, fullPage: !step.mobile });
+    }
     shots.push({ id: step.id, title: step.title, intro: step.intro, file, callouts: step.callouts, mobile: step.mobile });
     await page.close();
   }

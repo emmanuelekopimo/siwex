@@ -35,9 +35,10 @@ describe("seed and directory", () => {
   });
 
   it("filters hubs by city, track and keyword", async () => {
-    expect((await data.searchHubs(db, { city: "Lagos" }, TODAY)).map((h) => h.name)).toEqual(["Co-Creation Hub"]);
-    const design = await data.searchHubs(db, { track: "uiux" }, TODAY);
+    expect((await data.searchHubs(db, { city: "Lagos" }, TODAY)).map((h) => h.name)).toEqual(["Co-Creation Hub", "Leadspace"]);
+    const design = await data.searchHubs(db, { track: "uiux", city: "Uyo" }, TODAY);
     expect(design.map((h) => h.name).sort()).toEqual(["Square One", "Start Innovation Hub"]);
+    expect((await data.searchHubs(db, { track: "hardware" }, TODAY)).map((h) => h.city).sort()).toEqual(["Kaduna", "Ilorin", "Lagos", "Uyo"].sort());
     expect((await data.searchHubs(db, { q: "roothub" }, TODAY)).map((h) => h.name)).toEqual(["The RootHub"]);
   });
 
@@ -53,6 +54,33 @@ describe("seed and directory", () => {
     expect(start!.openings.map((o) => o.status)).toEqual(["closing_soon", "open", "closed"]);
     const root = await data.getHubBySlug(db, "the-roothub", TODAY);
     expect(root!.openings.map((o) => o.status)).toContain("full");
+  });
+});
+
+describe("browse openings", () => {
+  it("lists live openings across all hubs, closing soon first", async () => {
+    const live = await data.listOpenings(db, {}, TODAY);
+    expect(live.length).toBeGreaterThan(25);
+    expect(live.every((o) => o.status === "open" || o.status === "closing_soon")).toBe(true);
+    expect(live[0].status).toBe("closing_soon");
+    const all = await data.listOpenings(db, { status: "all" }, TODAY);
+    expect(all.some((o) => o.status === "closed")).toBe(true);
+    expect(all.some((o) => o.status === "full")).toBe(true);
+  });
+
+  it("filters openings by city, track and keyword", async () => {
+    const ph = await data.listOpenings(db, { city: "Port Harcourt" }, TODAY);
+    expect(new Set(ph.map((o) => o.hub.name))).toEqual(new Set(["Harvoxx Tech Hub", "SpaceTrax Innovation Hub"]));
+    const hw = await data.listOpenings(db, { track: "hardware" }, TODAY);
+    expect(hw.every((o) => o.track === "hardware")).toBe(true);
+    expect((await data.listOpenings(db, { q: "flutter" }, TODAY)).map((o) => o.title)).toEqual(["Mobile Developer Intern (Flutter)"]);
+  });
+
+  it("summarises cities and tracks for the home page", async () => {
+    const s = await data.browseSummary(db, TODAY);
+    expect(s.cities[0]).toMatchObject({ city: "Uyo", hubs: 5 });
+    expect(s.cities.map((c) => c.city)).toContain("Calabar");
+    expect([...s.byTrack.values()].reduce((a, b) => a + b, 0)).toBe(s.live.length);
   });
 });
 

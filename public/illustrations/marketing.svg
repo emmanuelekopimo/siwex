@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" width="400" height="260" role="img" aria-label="Marketer posting on social media">
+
+  
+  <rect x="206" y="22" width="110" height="196" rx="18" fill="#000000"/>
+  <rect x="214" y="34" width="94" height="172" rx="10" fill="#ffffff"/>
+  <circle cx="230" cy="50" r="8" fill="#ff6937"/><rect x="244" y="46" width="44" height="6" rx="3" fill="#000000"/>
+  <rect x="222" y="66" width="78" height="64" rx="6" fill="#ffc043"/><circle cx="262" cy="98" r="18" fill="#ffffff" opacity=".8"/>
+  <path d="M226 146 q6 -8 12 0 q6 -8 12 0 l-12 12z" fill="#e11900"/><rect x="256" y="144" width="40" height="6" rx="3" fill="#cbcbcb"/>
+  <rect x="222" y="166" width="78" height="6" rx="3" fill="#cbcbcb"/><rect x="222" y="178" width="52" height="6" rx="3" fill="#cbcbcb"/>
+  <path d="M330 70 h46 a8 8 0 0 1 8 8 v22 a8 8 0 0 1 -8 8 h-30 l-12 10 v-10 h-4 a8 8 0 0 1 -8 -8 v-22 a8 8 0 0 1 8 -8z" fill="#276ef1"/>
+  <rect x="340" y="82" width="34" height="5" rx="2.5" fill="#ffffff"/><rect x="340" y="92" width="22" height="5" rx="2.5" fill="#ffffff"/>
+  <path d="M150 52 h40 a8 8 0 0 1 8 8 v16 a8 8 0 0 1 -8 8 h-26 l-10 8 v-8 h-4 a8 8 0 0 1 -8 -8 v-16 a8 8 0 0 1 8 -8z" fill="#05944f"/>
+  <path d="M164 66 l6 6 l12 -12" stroke="#ffffff" stroke-width="4" fill="none" stroke-linecap="round"/>
+  
+  <g>
+    <rect x="107" y="180" width="11" height="50" rx="4" fill="#2b2b2b"/>
+    <rect x="122" y="180" width="11" height="50" rx="4" fill="#2b2b2b"/>
+    <rect x="104" y="227" width="15" height="6" rx="3" fill="#000000"/>
+    <rect x="121" y="227" width="15" height="6" rx="3" fill="#000000"/>
+    <rect x="116" y="130" width="8" height="10" fill="#8d5524"/>
+    <path d="M101 184 v-38 q0 -12 12 -12 h14 q12 0 12 12 v38z" fill="#ff6937"/>
+    <path d="M134 142 l10 22 l-10 6" stroke="#ff6937" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <path d="M106 142 l-4 22 l18 6" stroke="#ff6937" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <circle cx="132" cy="170" r="5" fill="#8d5524"/><rect x="112" y="150" width="16" height="26" rx="3" fill="#000000"/>
+    <circle cx="120" cy="120" r="13" fill="#8d5524"/>
+    <circle cx="120" cy="105" r="7" fill="#141414"/><path d="M107 120 a13 13 0 0 1 26 0 q-6 -6 -13 -6 q-7 0 -13 6z" fill="#141414"/>
+  </g>
+  <g transform="translate(42 232) scale(0.9)"><ellipse cx="-10" cy="-38" rx="9" ry="20" fill="#05944f" transform="rotate(-25 -10 -38)"/><ellipse cx="10" cy="-40" rx="9" ry="22" fill="#037a40" transform="rotate(22 10 -40)"/><ellipse cx="0" cy="-48" rx="8" ry="22" fill="#05944f"/><path d="M-14 -18 h28 l-4 18 h-20z" fill="#99644c"/></g>
+
+</svg>

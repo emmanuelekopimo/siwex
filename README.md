@@ -17,7 +17,9 @@ The sign-in page fills these in for you. Use the "Hub demo" tab to switch.
 
 ## Features
 
-- Hub directory with keyword, city and track filters. Includes Futtybills, Start Innovation Hub, The RootHub and Square One in Uyo, plus Chainspace HQ and Co-Creation Hub.
+- 17 tech hubs in 10 cities: Futtybills, Start Innovation Hub, The RootHub, Square One and Chainspace HQ in Uyo, plus KodeHauz (Eket), Co-Creation Hub and Leadspace (Lagos), Ventures Park (Abuja), Wennovation Hub (Ibadan), CoLab (Kaduna), Roar Nigeria Hub (Enugu), Harvoxx and SpaceTrax (Port Harcourt), Ilorin Innovation Hub, Guru Innovation Hub and Lift Hub (Calabar).
+- Hub directory with keyword, city and track filters and one-tap city chips. An openings page lists every live role, closest deadline first.
+- Uber-style look: black and white, Inter type, flat illustrations made for the project, generated geometric hub logos and procedural city skylines. No images are loaded from outside servers.
 - Opening status worked out from the deadline and accepted count: Open, Closing soon, Full, Closed.
 - Apply with a short note. The app blocks closed or full openings, duplicates, more than 3 pending applications, a second placement, and placements shorter than the student's SIWES.
 - Student dashboard with application status, a warning when a hub has not replied in 10 days, ranked recommendations and placement progress.
@@ -51,20 +53,21 @@ Set `SIWEX_TODAY=YYYY-MM-DD` to pin "today" for a repeatable demo. Seed data is 
 | `npm run db:generate` | New SQL migration from schema changes (drizzle-kit) |
 | `npm run db:migrate` | Apply migrations |
 | `npm run db:seed` | Wipe and reseed demo data |
-| `npm run db:seed:if-empty` | Seed only when the database has no users (used on Railway) |
+| `npm run db:seed:if-stale` | Seed when the database is empty or `SEED_VERSION` changed (used on Railway) |
 | `npm test` | Vitest unit and integration tests (needs `TEST_DATABASE_URL`) |
 | `npm run test:e2e` | Playwright tests on desktop and mobile against a production build |
+| `npx tsx scripts/gen-illustrations.ts` | Regenerate the SVG illustrations in `public/illustrations/` |
 | `npm run docs:build` | Rebuild `docs/SIWEX-Documentation.pdf` and `docs/SIWEX-Slides.pdf` (run `npm run build` first) |
 
 ## Tests
 
 - 41 unit tests (rules, dates, validation, sessions)
-- 18 integration tests against a real Postgres test database
-- 17 Playwright end-to-end tests (14 desktop, 3 mobile)
+- 21 integration tests against a real Postgres test database
+- 19 Playwright end-to-end tests (15 desktop, 4 mobile)
 
 ## Stack
 
-Next.js 16 (App Router, Server Components, Server Actions), TypeScript strict, Drizzle ORM and PostgreSQL, Zod, bcryptjs, jose, lucide-react, DiceBear, Fontsource, Vitest, Playwright. Deployed on Railway.
+Next.js 16 (App Router, Server Components, Server Actions), TypeScript strict, Drizzle ORM and PostgreSQL, Zod, bcryptjs, jose, lucide-react, DiceBear, Fontsource (Inter), Vitest, Playwright. Deployed on Railway.
 
 ## Project layout
 

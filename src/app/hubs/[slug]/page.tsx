@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BadgeCheck, CalendarClock, Clock, Globe, MapPin, Phone, Users, Wallet } from "lucide-react";
 import { getDb } from "@/db";
+import { Cover, hubScene } from "@/components/brand";
 import { HubLogo, OpeningBadge } from "@/components/ui";
 import { getSession } from "@/lib/auth";
 import { trackLabel } from "@/lib/catalog";
@@ -34,12 +35,15 @@ export default async function HubPage(props: PageProps<"/hubs/[slug]">) {
 
   return (
     <>
-      <div className="page-head">
-        <div className="container row">
+      <Cover track={hubScene(hub.slug)} color={hub.color} className="hub-banner" alt={`People at work at ${hub.name}`} />
+      <div className="container">
+        <div className="hub-banner-bar">
           <HubLogo name={hub.name} color={hub.color} size="lg" />
-          <div style={{ minWidth: 0 }}>
-            <h1 style={{ marginBottom: 4 }}>{hub.name}</h1>
-            <p className="row" style={{ gap: 6 }}><MapPin size={16} /> {hub.city}, {hub.state}</p>
+          <div style={{ minWidth: 0, paddingBottom: 4 }}>
+            <h1>{hub.name}</h1>
+            <p className="row muted" style={{ gap: 6, margin: 0 }}><MapPin size={16} /> {hub.city}, {hub.state}
+              {hub.addressVerified && <span className="badge open"><BadgeCheck size={14} /> Verified</span>}
+            </p>
           </div>
         </div>
       </div>
@@ -88,8 +92,6 @@ export default async function HubPage(props: PageProps<"/hubs/[slug]">) {
           })}
         </section>
         <aside className="stack">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/hub-building.svg" alt="" width={320} height={160} style={{ borderRadius: 16, width: "100%" }} />
           <div className="card stack" style={{ gap: 10 }}>
             <h2 style={{ margin: 0 }}>About</h2>
             <p className="small" style={{ margin: 0 }}>{hub.about}</p>
