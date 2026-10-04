@@ -9,6 +9,13 @@ export default async function SignUpPage(props: PageProps<"/sign-up">) {
   const role = sp.role === "hub" ? "hub" : "student";
   return (
     <div className="auth-wrap">
+      <aside className="auth-side">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/illustrations/product.svg" alt="" width={400} height={260} />
+        <h2>Join SIWEX</h2>
+        <p>Students find placements in minutes. Hubs list openings and pick interns with a match score.</p>
+      </aside>
+      <div className="auth-main">
       <div className="card auth-card wide stack">
         <div>
           <h1 style={{ fontSize: "1.7rem" }}>Create your account</h1>
@@ -20,6 +27,7 @@ export default async function SignUpPage(props: PageProps<"/sign-up">) {
         </div>
         <SignUpForm key={role} role={role} />
         <p className="small muted" style={{ margin: 0 }}>Already have an account? <Link href="/sign-in">Sign in</Link></p>
+      </div>
       </div>
     </div>
   );

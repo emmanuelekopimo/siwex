@@ -8,8 +8,10 @@ test.beforeEach(async () => {
 test("home page shows stats and featured hubs @mobile", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1 })).toContainText("SIWES placement");
-  await expect(page.getByTestId("stat-hubs")).toHaveText("6 hubs");
-  await expect(page.getByTestId("hub-card")).toHaveCount(3);
+  await expect(page.getByTestId("stat-hubs")).toHaveText("17");
+  await expect(page.getByTestId("hub-card")).toHaveCount(6);
+  await expect(page.getByTestId("track-tile")).toHaveCount(7);
+  await expect(page.getByTestId("city-card").first()).toContainText("Uyo");
   // no sideways scrolling on any viewport
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   expect(overflow).toBeLessThanOrEqual(0);
@@ -22,16 +24,31 @@ test("hub directory lists the Uyo hubs and filters @mobile", async ({ page }) =>
   }
   await page.getByLabel("City").selectOption("Lagos");
   await page.getByRole("button", { name: "Filter" }).click();
-  await expect(page.getByTestId("result-count")).toHaveText("1 hub found");
-  await expect(page.getByTestId("hub-card")).toContainText("Co-Creation Hub");
+  await expect(page.getByTestId("result-count")).toHaveText("2 hubs found");
+  await expect(page.getByTestId("hub-card").first()).toContainText("Co-Creation Hub");
+  await page.getByRole("link", { name: "Calabar", exact: true }).first().click();
+  await expect(page.getByTestId("result-count")).toHaveText("2 hubs found");
 });
 
-test("search from the home page", async ({ page }) => {
+test("search openings from the home page @mobile", async ({ page }) => {
   await page.goto("/");
-  await page.getByLabel("Search hubs").fill("roothub");
-  await page.getByRole("button", { name: "Search" }).click();
-  await expect(page).toHaveURL(/\/hubs\?q=roothub/);
-  await expect(page.getByTestId("hub-card")).toHaveCount(1);
+  await page.getByLabel("Search openings").fill("flutter");
+  await page.getByRole("button", { name: "Search openings" }).click();
+  await expect(page).toHaveURL(/\/openings\?q=flutter/);
+  await expect(page.getByTestId("opening-row")).toHaveCount(1);
+  await expect(page.getByTestId("opening-row")).toContainText("KodeHauz");
+});
+
+test("openings page filters by track and can include closed roles", async ({ page }) => {
+  await page.goto("/openings");
+  const live = Number((await page.getByTestId("opening-count").textContent())!.split(" ")[0]);
+  expect(live).toBeGreaterThan(25);
+  await page.locator(".chip-row").getByRole("link", { name: "Hardware and IoT" }).click();
+  await expect(page).toHaveURL(/track=hardware/);
+  await expect(page.getByTestId("opening-count")).toHaveText("4 openings");
+  await page.getByRole("link", { name: "Include closed and full" }).click();
+  const withClosed = Number((await page.getByTestId("opening-count").textContent())!.split(" ")[0]);
+  expect(withClosed).toBeGreaterThanOrEqual(4);
 });
 
 test("hub page shows opening states and asks visitors to sign in", async ({ page }) => {

@@ -57,9 +57,9 @@ function dataUri(file: string, mime: string) {
 }
 
 function fontFaces() {
-  const dir = path.join(ROOT, "node_modules/@fontsource/plus-jakarta-sans/files");
-  return [400, 600, 700, 800]
-    .map((w) => `@font-face{font-family:"Plus Jakarta Sans";font-weight:${w};font-style:normal;src:url(${dataUri(path.join(dir, `plus-jakarta-sans-latin-${w}-normal.woff2`), "font/woff2")}) format("woff2");}`)
+  const dir = path.join(ROOT, "node_modules/@fontsource/inter/files");
+  return [400, 500, 600, 700]
+    .map((w) => `@font-face{font-family:"Inter";font-weight:${w};font-style:normal;src:url(${dataUri(path.join(dir, `inter-latin-${w}-normal.woff2`), "font/woff2")}) format("woff2");}`)
     .join("\n");
 }
 
@@ -73,8 +73,9 @@ async function main() {
     const shots = await takeShots(BASE, SHOTS);
     const assets: Assets = {
       fonts: fontFaces(),
-      logo: dataUri(path.join(ROOT, "public/logo.svg"), "image/svg+xml"),
-      hero: dataUri(path.join(ROOT, "public/hero.svg"), "image/svg+xml"),
+      logo: dataUri(path.join(ROOT, "public/logo-mark.svg"), "image/svg+xml"),
+      scenes: Object.fromEntries(["software", "uiux", "data", "marketing", "networking", "hardware", "product", "team"].map((n) => [n, dataUri(path.join(ROOT, `public/illustrations/${n}.svg`), "image/svg+xml")])),
+      hero: dataUri(path.join(ROOT, "public/illustrations/hero.svg"), "image/svg+xml"),
       shots: Object.fromEntries(shots.map((s) => [s.id, { ...s, src: dataUri(s.file, "image/png") }])),
       publicUrl: process.env.PUBLIC_URL ?? "https://siwex-production.up.railway.app",
     };

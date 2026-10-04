@@ -1,13 +1,7 @@
-import { avatarUri, initials } from "@/lib/avatar";
+import { avatarUri } from "@/lib/avatar";
 import { APPLICATION_LABEL, OPENING_STATUS_LABEL, type ApplicationDisplay, type OpeningStatus } from "@/lib/rules";
 
-export function HubLogo({ name, color, size }: { name: string; color: string; size?: "lg" }) {
-  return (
-    <div className={`hub-logo ${size ?? ""}`} style={{ background: color }} aria-hidden="true">
-      {initials(name)}
-    </div>
-  );
-}
+export { HubLogo } from "./brand";
 
 export function Avatar({ name, size }: { name: string; size?: "sm" }) {
   // eslint-disable-next-line @next/next/no-img-element

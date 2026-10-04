@@ -106,7 +106,7 @@ export default async function StudentDashboard() {
 
         <aside className="stack">
           <div className="card">
-            <h2 className="row" style={{ gap: 6 }}><Sparkles size={18} color="#7d2ae8" /> Recommended for you</h2>
+            <h2 className="row" style={{ gap: 6 }}><Sparkles size={18} /> Recommended for you</h2>
             <p className="muted small">Ranked by your course, city and SIWES length.</p>
             {recs.length === 0 ? (
               <p className="muted small">No open roles to recommend right now.</p>
