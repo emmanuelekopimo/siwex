@@ -53,7 +53,7 @@ Set `SIWEX_TODAY=YYYY-MM-DD` to pin "today" for a repeatable demo. Seed data is 
 | `npm run db:generate` | New SQL migration from schema changes (drizzle-kit) |
 | `npm run db:migrate` | Apply migrations |
 | `npm run db:seed` | Wipe and reseed demo data |
-| `npm run db:seed:if-empty` | Seed only when the database has no users (used on Railway) |
+| `npm run db:seed:if-stale` | Seed when the database is empty or `SEED_VERSION` changed (used on Railway) |
 | `npm test` | Vitest unit and integration tests (needs `TEST_DATABASE_URL`) |
 | `npm run test:e2e` | Playwright tests on desktop and mobile against a production build |
 | `npx tsx scripts/gen-illustrations.ts` | Regenerate the SVG illustrations in `public/illustrations/` |

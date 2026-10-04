@@ -12,8 +12,9 @@
     "db:migrate": "tsx scripts/migrate.ts",
     "db:seed": "tsx scripts/seed.ts",
     "db:seed:if-empty": "tsx scripts/seed.ts --if-empty",
+    "db:seed:if-stale": "tsx scripts/seed.ts --if-stale",
     "db:reset": "tsx scripts/seed.ts --reset",
-    "start:prod": "npm run db:migrate && npm run db:seed:if-empty && npm run start",
+    "start:prod": "npm run db:migrate && npm run db:seed:if-stale && npm run start",
     "test": "vitest run",
     "test:e2e": "playwright test",
     "docs:build": "tsx docs/scripts/build-docs.ts"

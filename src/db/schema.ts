@@ -107,3 +107,9 @@ export type Hub = typeof hubs.$inferSelect;
 export type Opening = typeof openings.$inferSelect;
 export type Application = typeof applications.$inferSelect;
 export type ApplicationStatus = Application["status"];
+
+/** Small key/value table. Holds the demo seed version so deploys know when to reseed. */
+export const appMeta = pgTable("app_meta", {
+  key: text("key").primaryKey(),
+  value: text("value").notNull(),
+});

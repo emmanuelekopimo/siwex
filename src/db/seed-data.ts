@@ -5,7 +5,7 @@
 import bcrypt from "bcryptjs";
 import { sql } from "drizzle-orm";
 import type { DB } from "./index";
-import { applications, hubs, openings, students, users } from "./schema";
+import { appMeta, applications, hubs, openings, students, users } from "./schema";
 import { addDays } from "@/lib/dates";
 
 import { DEMO_HUB_EMAIL, DEMO_PASSWORD, DEMO_STUDENT_EMAIL } from "@/lib/demo";
@@ -462,8 +462,16 @@ const STUDENTS: StudentSeed[] = [
     apps: [{ opening: "V1", status: "accepted", applied: -7, decided: -2 }] },
 ];
 
+/** Bump when the demo data changes so production reseeds on the next deploy. */
+export const SEED_VERSION = "2";
+
+export async function storedSeedVersion(db: DB): Promise<string | null> {
+  const [row] = await db.select().from(appMeta).where(sql`${appMeta.key} = 'seed_version'`);
+  return row?.value ?? null;
+}
+
 export async function clearAll(db: DB): Promise<void> {
-  await db.execute(sql`TRUNCATE applications, openings, hubs, students, users RESTART IDENTITY CASCADE`);
+  await db.execute(sql`TRUNCATE applications, openings, hubs, students, users, app_meta RESTART IDENTITY CASCADE`);
 }
 
 export async function isEmpty(db: DB): Promise<boolean> {
@@ -525,5 +533,6 @@ export async function seed(db: DB, today: string): Promise<{ users: number; hubs
     }
   });
 
+  await db.insert(appMeta).values({ key: "seed_version", value: SEED_VERSION }).onConflictDoUpdate({ target: appMeta.key, set: { value: SEED_VERSION } });
   return { users: HUBS.length + STUDENTS.length, hubs: HUBS.length, openings: OPENINGS.length, applications: appCount };
 }

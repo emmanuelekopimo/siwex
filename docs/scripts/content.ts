@@ -193,7 +193,7 @@ npm run dev                   # http://localhost:3000</pre>
 <tr><td>npm run dev / build / start</td><td>Next.js development, production build, production server.</td></tr>
 <tr><td>npm run db:generate</td><td>Create a new SQL migration from schema changes.</td></tr>
 <tr><td>npm run db:migrate</td><td>Apply migrations.</td></tr>
-<tr><td>npm run db:seed / db:seed:if-empty</td><td>Reseed demo data / seed only an empty database.</td></tr>
+<tr><td>npm run db:seed / db:seed:if-stale</td><td>Reseed demo data / seed only when the database is empty or the seed version changed.</td></tr>
 <tr><td>npm test</td><td>Vitest unit and integration tests.</td></tr>
 <tr><td>npm run test:e2e</td><td>Playwright end-to-end tests on desktop and mobile.</td></tr>
 <tr><td>npm run docs:build</td><td>Rebuild this PDF and the slide deck (run npm run build first).</td></tr></table>
@@ -211,7 +211,7 @@ npm run test:e2e   # 19 passed</pre>
 <p>The app runs on Railway in the project "school-projects", connected to the GitHub repository so every push redeploys.</p>
 <ol><li>A PostgreSQL service is provisioned in the project.</li>
 <li>The app service has <code>DATABASE_URL=\${{Postgres.DATABASE_URL}}</code>, a random <code>SESSION_SECRET</code> and <code>NODE_ENV=production</code>.</li>
-<li><code>railway.json</code> builds with <code>npm run build</code>. The start command runs migrations, seeds demo data only if the database is empty, then runs <code>next start -H 0.0.0.0</code>.</li>
+<li><code>railway.json</code> builds with <code>npm run build</code>. The start command runs migrations, seeds demo data when the database is empty or when the seed version in the code is newer than the one stored in <code>app_meta</code>, then runs <code>next start -H 0.0.0.0</code>.</li>
 <li>Railway calls <code>/api/health</code>, which runs <code>select 1</code> against the database, before switching traffic to a new deployment.</li></ol>
 <p>Live URL: <b>${esc(a.publicUrl)}</b></p>
 
